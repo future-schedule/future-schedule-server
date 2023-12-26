@@ -18,10 +18,18 @@ const eventSchema = new Schema (
       type: Schema.Types.ObjectId,
       ref: "User"
     },
+    dates: [{
+      type: Schema.Types.ObjectId,
+      ref: "Date"
+    }],
     members: [{
       type: Schema.Types.ObjectId,
       ref: "Member"
-    }]
+    }],
+    password: {
+      type: String,
+      required: true
+    }
   },
   {
     timestamps: true

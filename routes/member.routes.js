@@ -18,7 +18,7 @@ router.post("/events/:eventId/members", isAuthenticated, (req, res, next) => {
       MemberModel.create(addNewMember)
         .then(newMember => {
           EventModel.findByIdAndUpdate(eventId, {$push: {members: newMember._id}}, {returnDocument: "after"})
-            .populate({ path: "members", select: "-password", populate: { path: "member", select: "-password" } }) 
+            .populate({ path: "members", select: "-member.password", populate: { path: "member", select: "-password" } }) 
             .then(result => {
               res.json(result);
               console.log(result)
@@ -43,7 +43,39 @@ router.post("/events/:eventId/members", isAuthenticated, (req, res, next) => {
     })
 });
 
-router.put("/members/:memberId/availability", isAuthenticated, (req, res, next) => {
+// The below freeze codes are to display the members list in case I want to display them
+
+router.get("/members", isAuthenticated, (req, res, next) => {
+  MemberModel.find()
+    .populate({path: "member", select: "-password"})
+    .then(memberList => res.json(memberList))
+    .catch(e => {
+      console.log("failed to fetch the members")
+      res.status(500).json({
+        message: "error to get the list of member",
+        error: e
+      });
+    });
+});
+
+
+router.get("/members/:memberId", isAuthenticated, (req, res, next) => {
+  const {memberId} = req.params;
+
+  MemberModel.findById(memberId)
+    .populate({path: "member", select: "-password"})
+    .then(specificMember => res.json(specificMember))
+    .catch(e => {
+      console.log("failed to fetch the members")
+      res.status(500).json({
+        message: "error to get the list of member",
+        error: e
+      });
+    });
+});
+
+
+router.put("/members/:memberId", isAuthenticated, (req, res, next) => {
   const { memberId } = req.params;
   const { availability } = req.body; // Directly assign req.body.availability
 
@@ -58,12 +90,11 @@ router.put("/members/:memberId/availability", isAuthenticated, (req, res, next) 
     });
 });
 
-
 router.delete("/members/:memberId", isAuthenticated, (req, res, next) => {
   const { memberId } = req.params;
 
-  MemberModel.findByIdAndRemove(memberId)
-    .then(response => res.json("removing the member was successfull"))
+  MemberModel.findByIdAndDelete(memberId)
+    .then(response => res.json("removing the member was successfull", response))
     .catch(e => {
       console.log("failed to delete its event")
       res.status(500).json({
@@ -71,7 +102,7 @@ router.delete("/members/:memberId", isAuthenticated, (req, res, next) => {
         error: e
       });
     });
-})
+});
 
 
 module.exports = router;

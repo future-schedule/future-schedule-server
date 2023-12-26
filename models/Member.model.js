@@ -6,7 +6,11 @@ const memberSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User"
     },
-    availability: String
+    availability: String,
+    availabilities: [{
+      type: Schema.Types.ObjectId,
+      ref: "Availability"
+    }]
   },
   {
     timestamps: true
