@@ -87,7 +87,7 @@ router.post("/events/:eventId", isAuthenticated, (req, res, next) => {
         .populate({path: "ownerEvent", select: "-password"})
         .populate({path: "members", select: "-password", populate: { path: "member", select: "-password"}})
         .populate({path: "dates", select: "-password", populate: {path: "date", select: "-password"}})
-      } else {
+       } else {
         return Promise.reject({status: 401, message: "Incorrect password"})
       }
     })

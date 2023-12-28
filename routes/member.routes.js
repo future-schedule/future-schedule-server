@@ -11,8 +11,7 @@ router.post("/events/:eventId/members", isAuthenticated, (req, res, next) => {
   EventModel.findById(eventId)
     .then(event => {
       const addNewMember = {
-        member: req.body.member,
-        availability: req.body.availability
+        member: req.body.member
       };
 
       MemberModel.create(addNewMember)
@@ -64,6 +63,7 @@ router.get("/members/:memberId", isAuthenticated, (req, res, next) => {
 
   MemberModel.findById(memberId)
     .populate({path: "member", select: "-password"})
+    .populate({ path: "availabilities", select: "-password", populate: { path: "availability", select: "-password" } })
     .then(specificMember => res.json(specificMember))
     .catch(e => {
       console.log("failed to fetch the members")
@@ -77,7 +77,6 @@ router.get("/members/:memberId", isAuthenticated, (req, res, next) => {
 
 router.put("/members/:memberId", isAuthenticated, (req, res, next) => {
   const { memberId } = req.params;
-  const { availability } = req.body; // Directly assign req.body.availability
 
   MemberModel.findByIdAndUpdate(memberId, { availability }, { new: true })
     .then(newAvailability => res.json(newAvailability))
