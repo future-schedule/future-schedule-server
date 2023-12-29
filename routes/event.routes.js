@@ -3,9 +3,9 @@ const EventModel = require("../models/Event.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 router.post("/events", isAuthenticated, (req, res, next) => {
-  const {title, date, hour, password} = req.body;
+  const {title, hour, password} = req.body;
   const newEvent = {
-    title: title, date: date, hour: hour, 
+    title: title, hour: hour, 
     ownerEvent: req.payload._id, password: password
   };
 
@@ -106,7 +106,7 @@ router.post("/events/:eventId", isAuthenticated, (req, res, next) => {
 
 router.put("/events/:eventId", isAuthenticated, (req, res, next) => {
   const {eventId} = req.params;
-  const updateEventBody = {title: req.body.title, date: req.body.date, hour: req.body.hour};
+  const updateEventBody = {title: req.body.title, hour: req.body.hour};
 
   EventModel.findByIdAndUpdate(eventId, updateEventBody, {new: true})
     .then(eventUpdated => {res.json(eventUpdated)})

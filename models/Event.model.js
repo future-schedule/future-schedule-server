@@ -6,13 +6,8 @@ const eventSchema = new Schema (
       type: String,
       required: true
     },
-    date: {
-      type: Date,
-      required: true
-    },
     hour: {
-      type: String,
-      required: true
+      type: String
     },
     ownerEvent: {
       type: Schema.Types.ObjectId,

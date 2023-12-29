@@ -40,6 +40,7 @@ router.get("/dates/:dateId", isAuthenticated, (req, res, next) => {
 
   DateModel.findById(dateId)
   .populate({path: "date", select: "-password"})
+  .populate({ path: "availabilities", select: "-password", populate: { path: "availability", select: "-password" } })
   .then(specificDate => res.json(specificDate))
   .catch(e => {
     console.log("failed to fetch the specific date")
@@ -59,6 +60,7 @@ router.put("/dates/:dateId", isAuthenticated, (req, res, next) => {
 
   DateModel.findByIdAndUpdate(dateId, dateBody, {new: true})
   .populate({path: "date", select: "-password"})
+  .populate({ path: "availabilities", select: "-password", populate: { path: "availability", select: "-password" } })
   .then(updateSpecificDate => res.json(updateSpecificDate))
   .catch(e => {
     console.log("failed to update the specific date")

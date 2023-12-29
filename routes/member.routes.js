@@ -79,6 +79,7 @@ router.put("/members/:memberId", isAuthenticated, (req, res, next) => {
   const { memberId } = req.params;
 
   MemberModel.findByIdAndUpdate(memberId, { availability }, { new: true })
+    .populate({ path: "availabilities", select: "-password", populate: { path: "availability", select: "-password" } })
     .then(newAvailability => res.json(newAvailability))
     .catch(e => {
       console.log("Failed to update availability", e);
