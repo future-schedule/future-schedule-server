@@ -35,6 +35,18 @@ router.post("/events/:eventId/dates", isAuthenticated, (req, res, next) => {
   
 });
 
+router.get("/dates", isAuthenticated, (req, res, next) => {
+  DateModel.find()
+    .then(dateList => res.json(dateList))
+    .catch(e => {
+      console.log("failed to get the date list", e)
+      res.status(500).json({
+        message: "failed to get the date list",
+        message: e
+      })
+    })
+})
+
 router.get("/dates/:dateId", isAuthenticated, (req, res, next) => {
   const {dateId} = req.params;
 
