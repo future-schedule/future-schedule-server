@@ -6,36 +6,6 @@ const MemberModel = require("../models/Member.model");
 const EventModel = require("../models/Event.model");
 const DateModel = require("../models/Date.model");
 
-// router.post("/members/:memberId/availabilities", isAuthenticated, (req, res, next) => {
-//       const {memberId} = req.params;
-
-//       MemberModel.findById(memberId)
-//       .then(specificMember => {
-
-//         const addNewAvailability = {
-//           availability: req.body.availability
-//         };
-
-//         AvailabilityModel.create(addNewAvailability)
-//           .then(newAvailability => {
-//             MemberModel.findByIdAndUpdate(memberId, {$push: {availabilities: newAvailability._id}}, {returnDocument: "after"})
-//               .populate({ path: "availabilities", select: "-password", populate: { path: "availability", select: "-password" } }) 
-//               .then(result => {
-//                 res.json(result);
-//                 console.log(result)
-//               })
-//               .catch(e => console.log("failed to push a new availability", e));
-//           })
-//       })
-//       .catch(e => {
-//         console.log("failed to add a new availability")
-//         res.status(500).json({
-//           message: "error to add a new availability",
-//           error: e
-//         });
-//       });
-//     } );
-
 router.post("/members/:memberId/availabilities", isAuthenticated, (req, res, next) => {
   const { memberId } = req.params;
 
